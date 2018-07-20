@@ -10,6 +10,10 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import com.portal.dto.CustomerDto;
 import com.portal.util.CustomerValidator;
 
+/**
+ * Dummy Class
+ *
+ */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(CustomerValidator.class)
 @Ignore
