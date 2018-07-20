@@ -22,7 +22,6 @@ public class CustomerValidatorTests {
 	@Test
 	public void validateCustomerRequestTestForSuccess() {
 		CustomerDto CustomerDtoAddRequest = new CustomerDto();
-		// CustomerDtoAddRequest.setCustomerId(1);
 		CustomerDtoAddRequest.setFirstName("firstNameTest");
 		CustomerDtoAddRequest.setLastName("LastNameTest");
 		CustomerDtoAddRequest.setEmail("email@test.com");
