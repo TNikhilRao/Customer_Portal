@@ -1,4 +1,4 @@
-package com.portal.util;
+package com.portal.tests;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,10 +6,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.portal.dto.CustomerDto;
+import com.portal.util.CustomerValidator;
 
 @RunWith(SpringRunner.class)
 public class CustomerValidatorTest {

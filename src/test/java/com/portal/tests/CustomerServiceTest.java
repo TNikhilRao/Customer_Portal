@@ -1,4 +1,4 @@
-package com.portal.util;
+package com.portal.tests;
 
 import static org.junit.Assert.assertEquals;
 
@@ -18,8 +18,9 @@ import com.portal.dao.ICustomerDao;
 import com.portal.dto.CustomerDto;
 import com.portal.entity.Customer;
 import com.portal.exception.CustomerNotFoundException;
-import com.portal.exception.MobileNumberInvalidException;
 import com.portal.service.impl.CustomerServiceImpl;
+import com.portal.util.ConversionUtil;
+import com.portal.util.CustomerValidator;
 
 @RunWith(SpringRunner.class)
 public class CustomerServiceTest {
@@ -101,66 +102,13 @@ public class CustomerServiceTest {
 				new CustomerNotFoundException(Mockito.anyString(), Mockito.anyString(), Mockito.anyString()));
 	}
 
-	/**
-	 * This test will throw CustomerNotFound exception
-	 */
-	/*
-	 * @Test public void getCustomerTestForFail() { Long mobileNumber =
-	 * Long.valueOf("012345678900");
-	 * 
-	 * Customer customer = getCustomerEntity(); CustomerDto customerDto =
-	 * getCustomerDto();
-	 * 
-	 * Mockito.when(customerValidator.validateMobileNumber(mobileNumber)).thenReturn
-	 * (false);
-	 * Mockito.when(customerDao.findByMobileNumber(mobileNumber)).thenReturn(
-	 * customer);
-	 * 
-	 * Mockito.when(conversionUtil.getCustomerDto(customer)).thenReturn(customerDto)
-	 * ; customerDto = customerServiceImpl.getCustomer(mobileNumber);
-	 * 
-	 * assertEquals(customerDto.getCustomerId(), customer.getCustomerId()); }
-	 */
-	/*
-	 * @Test public void deleteCustomerTestForFail() {
-	 * 
-	 * Long mobileNumber = Long.valueOf("1234567890");
-	 * Mockito.when(customerValidator.validateMobileNumber(mobileNumber)).thenReturn
-	 * (true);
-	 * Mockito.when(customerDao.deleteByMobileNumber(mobileNumber)).thenReturn(true)
-	 * ;
-	 * 
-	 * boolean actual = customerServiceImpl.deleteCustomer(mobileNumber);
-	 * 
-	 * assertEquals(actual, true); }
-	 */
-	/*
-	 * @Test public void deleteCustomerTestForSuccess() {
-	 * 
-	 * Customer customer = getCustomerEntity();
-	 * 
-	 * Long mobileNumber = Long.valueOf("1234567890");
-	 * Mockito.when(customerValidator.validateMobileNumber(mobileNumber)).thenReturn
-	 * (true);
-	 * 
-	 * Mockito.when(customerDao.deleteByMobileNumber(mobileNumber)).thenReturn(true)
-	 * ; Mockito.when(customerDao.findByMobileNumber(mobileNumber)).thenReturn(
-	 * customer); //
-	 * Mockito.when(customerDao.findById(customer.getCustomerId())).thenReturn(
-	 * Mockito.any()); customerDao.findById(customer.getCustomerId()).get(); boolean
-	 * actual = customerServiceImpl.deleteCustomer(mobileNumber);
-	 * Mockito.when(customerDao.findByMobileNumber(mobileNumber)).thenReturn(
-	 * customer); if (customer != null) { assertEquals(actual, true); }
-	 * 
-	 * }
-	 */
-
 	@Test(expected = CustomerNotFoundException.class)
 	public void deleteCustomer_CustomerNotFoundExceptionTest() {
 
 		Long mobileNumber = new Long(1234567888);
 		Mockito.when(customerValidator.validateMobileNumber(mobileNumber)).thenReturn(true);
 		Mockito.when(customerDao.findByMobileNumber(mobileNumber)).thenReturn(null);
+
 		Mockito.when(customerServiceImpl.deleteCustomer(mobileNumber)).thenThrow(
 				new CustomerNotFoundException(Mockito.anyString(), Mockito.anyString(), Mockito.anyString()));
 
@@ -173,7 +121,9 @@ public class CustomerServiceTest {
 		Customer customer = getCustomerEntity();
 		Mockito.when(customerValidator.validateMobileNumber(mobileNumber)).thenReturn(true);
 		Mockito.when(customerDao.findByMobileNumber(mobileNumber)).thenReturn(customer);
-		Mockito.when(customerServiceImpl.deleteCustomer(mobileNumber)).thenReturn(true);
+		Mockito.when(customerDao.findById(customer.getCustomerId())).thenReturn(Optional.of(customer));
+		customerServiceImpl.deleteCustomer(mobileNumber);
+		Mockito.when(customerDao.findByMobileNumber(mobileNumber)).thenReturn(null);
 
 	}
 
@@ -199,17 +149,6 @@ public class CustomerServiceTest {
 
 		return customer;
 	}
-
-	/*
-	 * private Optional<Customer> getOptionalCustomerEntity() {
-	 * 
-	 * Customer customer = new Customer(Optional.of(Customer));
-	 * customer.setCustomerId(1); customer.setFirstName("firstNameTest");
-	 * customer.setLastName("LastNameTest"); customer.setEmail("email@test.com");
-	 * customer.setMobileNumber(Long.valueOf("1234567890"));
-	 * 
-	 * return customer; }
-	 */
 
 	@Test
 	public void updateCustomerTestForSuccess() {
